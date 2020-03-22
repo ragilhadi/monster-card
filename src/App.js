@@ -6,7 +6,8 @@ class App extends Component {
   constructor(){
     super()
     this.state = {
-      monster : []
+      monster : [],
+      searchField : ''
     }
   }
 
@@ -15,14 +16,25 @@ class App extends Component {
     .then(response => response.json())
     .then(users => this.setState({ monster: users}));
   }
-
   render(){
-  return (
-    <div className="App">
-      <Cardlist monster={this.state.monster}/>
-    </div>
-    );
-  }
+
+    const {monster,searchField} = this.state
+    const filterMonster = monster.filter( monster => 
+        monster.name.toLowerCase().includes(searchField.toLowerCase())
+      )
+    return (
+      <div className="App">
+        <input 
+        type='search' 
+        placeholder='Search Monster'
+        onChange={e => {
+          this.setState ({ searchField : e.target.value})
+        }}
+        />
+        <Cardlist monster={filterMonster}/>
+      </div>
+      );
+    }
 }
 
 export default App;
